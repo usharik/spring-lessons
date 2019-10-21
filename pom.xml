@@ -12,6 +12,7 @@
     <modules>
         <module>spring-mvc-xml</module>
         <module>spring-mvc-java</module>
+        <module>spring-mvc-jpa</module>
     </modules>
 
 </project>
