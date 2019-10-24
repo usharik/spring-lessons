@@ -44,7 +44,7 @@ public class CategoryController {
     @RequestMapping(value = "edit", method = RequestMethod.POST)
     public String editForm(@ModelAttribute("category") Category category) {
         categoryRepository.update(category);
-        return "category";
+        return "redirect:/categories";
     }
 
     @RequestMapping(value = "create", method = RequestMethod.POST)

@@ -1,25 +1,25 @@
 package ru.geekbrains.persistence;
 
-import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.geekbrains.persistence.entity.Category;
 
 import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
 import java.util.List;
 
 @Service
 public class CategoryRepository {
 
-    private final SessionFactory sessionFactory;
+    private final EntityManagerFactory entityManagerFactory;
 
     @Autowired
-    public CategoryRepository(SessionFactory sessionFactory) {
-        this.sessionFactory = sessionFactory;
+    public CategoryRepository(EntityManagerFactory entityManagerFactory) {
+        this.entityManagerFactory = entityManagerFactory;
     }
 
     public void create(Category category) {
-        EntityManager em = sessionFactory.createEntityManager();
+        EntityManager em = entityManagerFactory.createEntityManager();
         em.getTransaction().begin();
 
         em.persist(category);
@@ -29,7 +29,7 @@ public class CategoryRepository {
     }
 
     public void update(Category category) {
-        EntityManager em = sessionFactory.createEntityManager();
+        EntityManager em = entityManagerFactory.createEntityManager();
         em.getTransaction().begin();
 
         em.merge(category);
@@ -39,7 +39,7 @@ public class CategoryRepository {
     }
 
     public List<Category> findAll() {
-        EntityManager em = sessionFactory.createEntityManager();
+        EntityManager em = entityManagerFactory.createEntityManager();
 
         List<Category> categories = em.createQuery("from Category", Category.class).getResultList();
         em.close();
@@ -47,7 +47,7 @@ public class CategoryRepository {
     }
 
     public Category findById(Long id) {
-        EntityManager em = sessionFactory.createEntityManager();
+        EntityManager em = entityManagerFactory.createEntityManager();
 
         Category category = em.find(Category.class, id);
         em.close();
