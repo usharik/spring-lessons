@@ -28,7 +28,7 @@ public class ProductController {
 
     @RequestMapping(value = "create", method = RequestMethod.GET)
     public String createProductFrom(@RequestParam("categoryId") Long categoryId, Model model) {
-        Category category = categoryRepository.findById(categoryId);
+        Category category = categoryRepository.findById(categoryId).get();
         Product product = new Product();
         product.setCategory(category);
         model.addAttribute("product", product);
@@ -37,8 +37,8 @@ public class ProductController {
 
     @RequestMapping(value = "create", method = RequestMethod.POST)
     public String createProduct(@ModelAttribute("product") Product product) {
-        product.setCategory(categoryRepository.findById(product.getCategoryId()));
-        productRepository.create(product);
+        product.setCategory(categoryRepository.findById(product.getCategoryId()).get());
+        productRepository.save(product);
         return "redirect:/categories/edit?id=" + product.getCategory().getId();
     }
 }

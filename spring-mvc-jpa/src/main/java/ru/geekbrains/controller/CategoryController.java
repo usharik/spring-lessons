@@ -36,20 +36,20 @@ public class CategoryController {
 
     @RequestMapping(value = "edit", method = RequestMethod.GET)
     public String editForm(@RequestParam("id") Long id, Model model) {
-        model.addAttribute("category", categoryRepository.findById(id));
+        model.addAttribute("category", categoryRepository.findById(id).get());
         model.addAttribute("action", "edit");
         return "category";
     }
 
     @RequestMapping(value = "edit", method = RequestMethod.POST)
     public String editForm(@ModelAttribute("category") Category category) {
-        categoryRepository.update(category);
-        return "redirect:/category?id=" + category.getId();
+        categoryRepository.save(category);
+        return "redirect:/categories";
     }
 
     @RequestMapping(value = "create", method = RequestMethod.POST)
     public String createCategory(@ModelAttribute("category") Category category) {
-        categoryRepository.create(category);
+        categoryRepository.save(category);
         return "redirect:/categories";
     }
 }
