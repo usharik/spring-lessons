@@ -12,6 +12,7 @@ import ru.geekbrains.persistence.ProductRepository;
 import ru.geekbrains.persistence.entity.Category;
 import ru.geekbrains.persistence.entity.Product;
 
+
 @Controller
 @RequestMapping("products")
 public class ProductController {
@@ -26,9 +27,22 @@ public class ProductController {
         this.categoryRepository = categoryRepository;
     }
 
+    @RequestMapping(value = "", method = RequestMethod.GET)
+    public String products(@RequestParam(name = "categoryId", required = false) Long categoryId,
+                           Model model) {
+        model.addAttribute("categories", categoryRepository.findAll());
+        if (categoryId == null || categoryId == -1) {
+            model.addAttribute("products", productRepository.findAll());
+        } else {
+            model.addAttribute("products", productRepository.getAllByCategory_Id(categoryId));
+        }
+        return "products";
+    }
+
     @RequestMapping(value = "create", method = RequestMethod.GET)
     public String createProductFrom(@RequestParam("categoryId") Long categoryId, Model model) {
-        Category category = categoryRepository.findById(categoryId);
+        Category category = categoryRepository.findById(categoryId)
+                .orElseThrow(() -> new IllegalStateException("Category not found"));
         Product product = new Product();
         product.setCategory(category);
         model.addAttribute("product", product);
@@ -37,8 +51,9 @@ public class ProductController {
 
     @RequestMapping(value = "create", method = RequestMethod.POST)
     public String createProduct(@ModelAttribute("product") Product product) {
-        product.setCategory(categoryRepository.findById(product.getCategoryId()));
-        productRepository.create(product);
+        product.setCategory(categoryRepository.findById(product.getCategoryId())
+                .orElseThrow(() -> new IllegalStateException("Category not found")));
+        productRepository.save(product);
         return "redirect:/categories/edit?id=" + product.getCategory().getId();
     }
 }
