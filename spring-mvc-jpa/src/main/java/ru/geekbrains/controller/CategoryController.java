@@ -7,24 +7,24 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import ru.geekbrains.persistence.CategoryRepository;
 import ru.geekbrains.persistence.entity.Category;
+import ru.geekbrains.service.CategoryService;
 
 
 @Controller
 @RequestMapping("categories")
 public class CategoryController {
 
-    private final CategoryRepository categoryRepository;
+    private final CategoryService categoryService;
 
     @Autowired
-    public CategoryController(CategoryRepository categoryRepository) {
-        this.categoryRepository = categoryRepository;
+    public CategoryController(CategoryService categoryService) {
+        this.categoryService = categoryService;
     }
 
     @RequestMapping(value = "", method = RequestMethod.GET)
     public String allCategories(Model model) {
-        model.addAttribute("categories", categoryRepository.findAll());
+        model.addAttribute("categories", categoryService.findAllWithoutProducts());
         return "categories";
     }
 
@@ -37,22 +37,16 @@ public class CategoryController {
 
     @RequestMapping(value = "edit", method = RequestMethod.GET)
     public String editForm(@RequestParam("id") Long id, Model model) {
-        Category category = categoryRepository.findById(id)
+        Category category = categoryService.findByIdWithProducts(id)
                 .orElseThrow(() -> new IllegalStateException("Category not found"));
         model.addAttribute("category", category);
         model.addAttribute("action", "edit");
         return "category";
     }
 
-    @RequestMapping(value = "edit", method = RequestMethod.POST)
-    public String editForm(@ModelAttribute("category") Category category) {
-        categoryRepository.save(category);
-        return "redirect:/categories";
-    }
-
-    @RequestMapping(value = "create", method = RequestMethod.POST)
+    @RequestMapping(value = "save", method = RequestMethod.POST)
     public String createCategory(@ModelAttribute("category") Category category) {
-        categoryRepository.save(category);
+        categoryService.save(category);
         return "redirect:/categories";
     }
 }

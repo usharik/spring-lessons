@@ -31,7 +31,10 @@
         <tr>
             <td>${prod.id}</td>
 
-            <td>${prod.name}</td>
+            <c:url value="/products/edit" var="editProductUrl">
+                <c:param name="id" value="${prod.id}"/>
+            </c:url>
+            <td><a href="${editProductUrl}">${prod.name}</a></td>
 
             <td>${prod.description}</td>
 

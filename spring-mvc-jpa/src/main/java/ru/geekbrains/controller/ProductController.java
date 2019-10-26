@@ -7,53 +7,53 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import ru.geekbrains.persistence.CategoryRepository;
-import ru.geekbrains.persistence.ProductRepository;
-import ru.geekbrains.persistence.entity.Category;
-import ru.geekbrains.persistence.entity.Product;
+import ru.geekbrains.controller.repr.ProductRepr;
+import ru.geekbrains.service.CategoryService;
+import ru.geekbrains.service.ProductService;
 
 
 @Controller
 @RequestMapping("products")
 public class ProductController {
 
-    private final ProductRepository productRepository;
+    private final ProductService productService;
 
-    private final CategoryRepository categoryRepository;
+    private final CategoryService categoryService;
 
     @Autowired
-    public ProductController(ProductRepository productRepository, CategoryRepository categoryRepository) {
-        this.productRepository = productRepository;
-        this.categoryRepository = categoryRepository;
+    public ProductController(ProductService productService, CategoryService categoryService) {
+        this.productService = productService;
+        this.categoryService = categoryService;
     }
 
     @RequestMapping(value = "", method = RequestMethod.GET)
     public String products(@RequestParam(name = "categoryId", required = false) Long categoryId,
                            Model model) {
-        model.addAttribute("categories", categoryRepository.findAll());
+        model.addAttribute("categories", categoryService.findAllWithoutProducts());
         if (categoryId == null || categoryId == -1) {
-            model.addAttribute("products", productRepository.findAll());
+            model.addAttribute("products", productService.findAll());
         } else {
-            model.addAttribute("products", productRepository.getAllByCategory_Id(categoryId));
+            model.addAttribute("products", productService.getAllByCategory_Id(categoryId));
         }
         return "products";
     }
 
     @RequestMapping(value = "create", method = RequestMethod.GET)
     public String createProductFrom(@RequestParam("categoryId") Long categoryId, Model model) {
-        Category category = categoryRepository.findById(categoryId)
-                .orElseThrow(() -> new IllegalStateException("Category not found"));
-        Product product = new Product();
-        product.setCategory(category);
-        model.addAttribute("product", product);
+        model.addAttribute("product", productService.getEmptyProductReprWithCategory(categoryId));
         return "product";
     }
 
-    @RequestMapping(value = "create", method = RequestMethod.POST)
-    public String createProduct(@ModelAttribute("product") Product product) {
-        product.setCategory(categoryRepository.findById(product.getCategoryId())
-                .orElseThrow(() -> new IllegalStateException("Category not found")));
-        productRepository.save(product);
-        return "redirect:/categories/edit?id=" + product.getCategory().getId();
+    @RequestMapping(value = "edit", method = RequestMethod.GET)
+    public String editProduct(@RequestParam("id") Long id, Model model) {
+        model.addAttribute("product", productService.getProductReprById(id)
+                .orElseThrow(() -> new IllegalStateException("Product not found")));
+        return "product";
+    }
+
+    @RequestMapping(value = "save", method = RequestMethod.POST)
+    public String createProduct(@ModelAttribute("product") ProductRepr productRepr) {
+        productService.save(productRepr);
+        return "redirect:/categories/edit?id=" + productRepr.getCategoryId();
     }
 }

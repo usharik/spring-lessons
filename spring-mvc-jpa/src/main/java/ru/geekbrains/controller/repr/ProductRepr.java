@@ -1,42 +1,31 @@
-package ru.geekbrains.persistence.entity;
+package ru.geekbrains.controller.repr;
 
-import ru.geekbrains.controller.repr.ProductRepr;
-
-import javax.persistence.*;
 import java.math.BigDecimal;
 
-@Entity
-@Table(name = "PRODUCT")
-public class Product {
+public class ProductRepr {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(unique = true, nullable = false)
     private String name;
 
-    @Column
     private String description;
 
-    @Column(nullable = false)
     private BigDecimal price;
 
-    @ManyToOne
-    @JoinColumn(name = "category_id")
-    private Category category;
-
-    // Нам пришлось добавить это поле, т.к. мы не можем передать целый класс Category как часть формы
-    // На следующем занятии разберем, как решить эту проблему
-    @Transient
     private Long categoryId;
 
-    public Product() {
+    private String categoryName;
+
+    public ProductRepr() {
     }
 
-    public Product(String name, String description) {
+    public ProductRepr(Long id, String name, String description, BigDecimal price, Long categoryId, String categoryName) {
+        this.id = id;
         this.name = name;
         this.description = description;
+        this.price = price;
+        this.categoryId = categoryId;
+        this.categoryName = categoryName;
     }
 
     public Long getId() {
@@ -71,19 +60,19 @@ public class Product {
         this.price = price;
     }
 
-    public Category getCategory() {
-        return category;
-    }
-
-    public void setCategory(Category category) {
-        this.category = category;
-    }
-
     public Long getCategoryId() {
         return categoryId;
     }
 
     public void setCategoryId(Long categoryId) {
         this.categoryId = categoryId;
+    }
+
+    public String getCategoryName() {
+        return categoryName;
+    }
+
+    public void setCategoryName(String categoryName) {
+        this.categoryName = categoryName;
     }
 }

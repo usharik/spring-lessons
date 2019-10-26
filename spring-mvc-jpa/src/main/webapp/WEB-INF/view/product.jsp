@@ -6,18 +6,18 @@
 </head>
 <body>
 
-<c:url value="/products/create" var="createUrl"/>
+<c:url value="/products/save" var="createUrl"/>
 <form action="${createUrl}" method="post">
     <%-- Очень часто применяемый способ передачи id через форму --%>
     <input type="hidden" name="id" id="id" value="${product.id}">
-    <input type="hidden" name="categoryId" id="categoryId" value="${product.category.id}">
+    <input type="hidden" name="categoryId" id="categoryId" value="${product.categoryId}">
     <p>
         <label for="name">Name</label>
         <input type="text" id="name" name="name" value="${product.name}" />
     </p>
     <p>
         <label for="category">Category</label>
-        <input type="text" id="category" name="category" value="${product.category.name}" disabled />
+        <input type="text" id="category" name="category" value="${product.categoryName}" disabled />
     </p>
     <p>
         <label for="price">Price</label>

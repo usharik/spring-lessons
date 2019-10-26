@@ -17,13 +17,14 @@ public class Category {
     @Column
     private String description;
 
-    @OneToMany(mappedBy = "category", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "category")
     private List<Product> products;
 
     public Category() {
     }
 
-    public Category(String name, String description) {
+    public Category(Long id, String name, String description) {
+        this.id = id;
         this.name = name;
         this.description = description;
     }
