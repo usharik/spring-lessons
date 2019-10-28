@@ -7,6 +7,7 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="spring-mvc-xml" />
+        <module name="spring-mvc-thymeleaf" />
         <module name="spring-mvc-jpa" />
         <module name="spring-mvc-java" />
       </profile>
