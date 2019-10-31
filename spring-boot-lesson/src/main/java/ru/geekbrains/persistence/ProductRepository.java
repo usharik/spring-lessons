@@ -22,12 +22,24 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
             "where p.id = :id")
     Optional<ProductRepr> getProductReprById(@Param("id") Long id);
 
-    @Query("select new ru.geekbrains.controller.repr.ProductRepr(p.id, p.name, p.description, p.price, p.category.id, p.category.name) " +
+    @Query("select new ru.geekbrains.controller.repr.ProductRepr(p.id, p.name, p.description, p.price, c.id, c.name) " +
             "from Product p " +
-            "where (:categoryId = -1L or p.category.id = :categoryId) and " +
+            "left join Category c on p.category.id = c.id " +
+            "where (:categoryId = -1L or c.id = :categoryId) and " +
             "(:priceFrom is null or p.price >= :priceFrom) and " +
             "(:priceTo is null or p.price <= :priceTo)")
     List<ProductRepr> filterProducts(@Param("categoryId") Long categoryId,
+                                     @Param("priceFrom") BigDecimal priceFrom,
+                                     @Param("priceTo") BigDecimal priceTo,
+                                     Pageable pageable);
+
+    @Query("select count(p)" +
+            "from Product p " +
+            "left join Category c on p.category.id = c.id " +
+            "where (:categoryId = -1L or c.id = :categoryId) and " +
+            "(:priceFrom is null or p.price >= :priceFrom) and " +
+            "(:priceTo is null or p.price <= :priceTo)")
+    Long countFilterProducts(@Param("categoryId") Long categoryId,
                                      @Param("priceFrom") BigDecimal priceFrom,
                                      @Param("priceTo") BigDecimal priceTo);
 }
