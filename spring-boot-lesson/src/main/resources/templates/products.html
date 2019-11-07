@@ -11,6 +11,8 @@
           integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous"/>
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css"/>
 
+    <link rel="stylesheet" type="text/css" href="style.css" th:href="@{style.css}"/>
+
     <title>Products</title>
 </head>
 
@@ -18,28 +20,33 @@
 
 <div class="container">
 
-    <form id="filterForm" action="" method="get" th:object="${filter}">
-        <label for="categoryFilter">Category filter</label>
-        <select id="categoryFilter" th:field="*{categoryId}">
-            <option th:value="${-1}"></option>
-            <option th:each="cat : ${categories}"
-                    th:value="${cat.id}"
-                    th:text="${cat.name}">Category
-            </option>
-        </select>
+    <form id="filterForm" action="" method="get"
+          th:object="${filter}">
 
-        <label for="priceFrom">Price from</label>
-        <input type="number" id="priceFrom" th:field="*{priceFrom}"/>
+        <div class="form-inline">
+            <label for="categoryFilter" class="my-1 mr-2">Category</label>
+            <select id="categoryFilter" th:field="*{categoryId}" class="form-control my-1 mr-sm-2">
+                <option th:value="${-1}"></option>
+                <option th:each="cat : ${categories}"
+                        th:value="${cat.id}"
+                        th:text="${cat.name}">Category
+                </option>
+            </select>
 
-        <label for="priceTo">to</label>
-        <input type="number" id="priceTo" th:field="*{priceTo}"/>
+            <label for="priceFrom" class="my-1 mr-2">Price from</label>
+            <input type="number" id="priceFrom" th:field="*{priceFrom}"
+                   class="form-control my-1 mr-sm-2 input-width"/>
 
-        <label for="pageSize">Page size</label>
-        <input type="number" id="pageSize" th:field="*{pageSize}"/>
+            <label for="priceTo" class="my-1 mr-2">to</label>
+            <input type="number" id="priceTo" th:field="*{priceTo}" class="form-control my-1 mr-sm-2"/>
 
-        <input type="hidden" th:field="*{currentPage}"/>
+            <label for="pageSize" class="my-1 mr-2">Page size</label>
+            <input type="number" id="pageSize" th:field="*{pageSize}" class="form-control my-1 mr-sm-2"/>
 
-        <input type="submit" value="Apply"/>
+            <input type="hidden" th:field="*{currentPage}"/>
+
+            <button type="submit" class="btn btn-primary my-2">Apply</button>
+        </div>
 
         <table class="table">
             <tr>
@@ -50,7 +57,7 @@
                 <th>Category</th>
             </tr>
 
-            <tr th:each="prod : ${products}">
+            <tr th:each="prod, cat : ${prodPage.content}">
                 <td th:text="${prod.id}">1</td>
 
                 <td><a th:href="@{/products/edit(id=${prod.id})}" th:text="${prod.name}">Product name</a></td>
@@ -59,7 +66,7 @@
 
                 <td th:text="${prod.description}">Description</td>
 
-                <td th:text="${prod.categoryName}">Category</td>
+                <td th:text="${prod.category?.name}">Category</td>
             </tr>
 
         </table>
@@ -69,11 +76,11 @@
 
                 <li class="page-item">
                     <a class="page-link" href="#"
-                       th:onclick="'submitWithPagination(' + *{prevPage} + ')'">Previous</a>
+                       th:onclick="'submitWithPagination(' + ${prodPage.previousOrFirstPageable().pageNumber} + ')'">Previous</a>
                 </li>
 
-                <li th:each="num : ${#numbers.sequence(0, filter.pageCount - 1)}"
-                    th:classappend="${num == filter.currentPage ? 'active' : ''}"
+                <li th:each="num : ${#numbers.sequence(0, prodPage.totalPages - 1)}"
+                    th:classappend="${num == prodPage.number ? 'active' : ''}"
                     class="page-item">
                     <a class="page-link" href="#"
                        th:text="${num+1}" th:onclick="'submitWithPagination(' + ${num} + ')'">1</a>
@@ -81,7 +88,7 @@
 
                 <li class="page-item">
                     <a class="page-link" href="#"
-                       th:onclick="'submitWithPagination(' + *{nextPage} + ')'">Next</a>
+                       th:onclick="'submitWithPagination(' + ${prodPage.nextOrLastPageable().pageNumber} + ')'">Next</a>
                 </li>
             </ul>
         </nav>

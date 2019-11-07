@@ -14,8 +14,6 @@ public class ProductFilter {
 
     private Integer pageSize;
 
-    private Integer pageCount;
-
     public ProductFilter() {
     }
 
@@ -23,13 +21,8 @@ public class ProductFilter {
         this.categoryId = categoryId;
         this.priceFrom = priceFrom;
         this.priceTo = priceTo;
-        this.pageSize = pageSize;
         this.currentPage = currentPage;
-    }
-
-    public void applyItemCount(Integer itemCount) {
-        this.pageCount = (itemCount + pageSize - 1) / pageSize;
-        this.currentPage = currentPage >= pageCount ? pageCount - 1 : currentPage;
+        this.pageSize = pageSize;
     }
 
     public Long getCategoryId() {
@@ -70,21 +63,5 @@ public class ProductFilter {
 
     public void setPageSize(Integer pageSize) {
         this.pageSize = pageSize;
-    }
-
-    public Integer getPageCount() {
-        return pageCount;
-    }
-
-    public void setPageCount(Integer pageCount) {
-        this.pageCount = pageCount;
-    }
-
-    public Integer getPrevPage() {
-        return currentPage == 0 ? 0 : currentPage - 1;
-    }
-
-    public Integer getNextPage() {
-        return currentPage == pageCount - 1 ? currentPage : currentPage + 1;
     }
 }

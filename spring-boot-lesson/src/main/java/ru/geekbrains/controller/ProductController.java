@@ -38,9 +38,8 @@ public class ProductController {
                            Model model) {
         ProductFilter productFilter = new ProductFilter(categoryId, priceFrom, priceTo,
                 currentPage, pageSize);
-        productFilter.applyItemCount(productService.countFilterProducts(productFilter).intValue());
 
-        model.addAttribute("products", productService.filterProducts(productFilter));
+        model.addAttribute("prodPage", productService.filterProducts(productFilter));
         model.addAttribute("filter", productFilter);
         model.addAttribute("categories", categoryService.findAllWithoutProducts());
 
