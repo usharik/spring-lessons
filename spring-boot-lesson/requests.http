@@ -8,10 +8,11 @@ GET http://localhost:8081/api/category/3/id
 
 POST http://localhost:8081/api/category/
 Content-Type: application/json
+Authorization: Basic alex:123456
 
 {
-  "name": "New Category !!!",
-  "description": "asdfasdfs 2",
+  "name": "!!! New Category !!!",
+  "description": "!!! asdfasdfs 2 !!!",
   "products": []
 }
 

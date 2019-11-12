@@ -1,4 +1,3 @@
-<!DOCTYPE html>
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml"
       xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
@@ -13,8 +12,11 @@
           integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous"/>
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css"/>
 
-    <title>New product</title>
+    <link rel="stylesheet" type="text/css" href="style.css" th:href="@{style.css}"/>
+
+    <title>Products</title>
 </head>
+
 <body>
 
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
@@ -40,39 +42,13 @@
 </nav>
 
 <div class="container">
-    <form th:action="@{/products/save}" th:object="${product}" method="post">
-        <!-- Очень часто применяемый способ передачи id через форму -->
-        <input type="hidden" id="id" th:field="*{id}">
-        <input type="hidden" id="categoryId" th:field="*{categoryId}">
-
-        <div class="form-group">
-            <label for="name">Name</label>
-            <input type="text" id="name" name="name" class="form-control" th:field="*{name}"/>
+    <div class="row py-2">
+        <div class="col-12">
+            <p>Error</p>
+            <p th:text="${#response.status}"></p>
+            <p th:text="${exception?.localizedMessage}"></p>
         </div>
-
-        <div class="form-group">
-            <label for="category">Category</label>
-            <input type="text" id="category" class="form-control" th:field="*{categoryName}" disabled/>
-        </div>
-
-        <div class="form-group">
-            <label for="price">Price</label>
-            <input type="number" id="price" class="form-control" th:field="*{price}"/>
-        </div>
-
-        <div class="form-group">
-            <label for="description">Description</label>
-            <input type="text" id="description" class="form-control" th:field="*{description}"/>
-        </div>
-
-        <div class="form-group">
-            <label for="newPictures">Product image</label>
-            <input type="file" class="form-control-file" id="newPictures" th:field="*{newPictures}"
-                   placeholder="Upload new product picture" multiple required>
-        </div>
-
-        <button type="submit" class="btn btn-primary">Submit</button>
-    </form>
+    </div>
 </div>
 
 <!-- Optional JavaScript -->

@@ -16,38 +16,63 @@
 </head>
 <body>
 
-<form th:object="${category}" th:action="@{/categories/save}" method="post">
-    <!-- Очень часто применяемый способ передачи id через форму -->
-    <input type="hidden" name="id" id="id" th:field="*{id}">
-    <p>
-        <label for="name">Name</label>
-        <input type="text" id="name" name="name" th:field="*{name}"/>
-    </p>
-    <p>
-        <label for="description">Description</label>
-        <input type="text" id="description" name="description" th:field="*{description}"/>
-    </p>
-    <input type="submit"/>
-</form>
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="#">Geek Market</a>
 
-<a th:href="@{/products/create?categoryId={categoryId}(categoryId=${category.id})}">Create new Product</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
 
-<table border="1">
-    <tr>
-        <th>Id</th>
-        <th>Name</th>
-        <th>Description</th>
-        <th>Price</th>
-    </tr>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item active">
+                <a class="nav-link" href="#">List</a>
+            </li>
+        </ul>
 
-    <tr th:each="prod : ${category.products}">
-        <td th:text="${prod.id}">1</td>
-        <td><a th:href="@{/products/edit?id={id}(id=${prod.id})}" th:text="${prod.name}"></a></td>
-        <td th:text="${prod.description}">Desc</td>
-        <td th:text="${prod.price}">123.00</td>
-    </tr>
+        <form class="form-inline my-2 my-lg-0" th:action="@{/logout}" method="post">
+            <button type="submit" class="btn btn-outline-success my-2 my-sm-0">Logout</button>
+        </form>
+    </div>
+</nav>
 
-</table>
+<div class="container">
+
+    <form th:object="${category}" th:action="@{/admin/categories/save}" method="post">
+        <!-- Очень часто применяемый способ передачи id через форму -->
+        <input type="hidden" name="id" id="id" th:field="*{id}">
+        <p>
+            <label for="name">Name</label>
+            <input type="text" id="name" name="name" th:field="*{name}"/>
+        </p>
+        <p>
+            <label for="description">Description</label>
+            <input type="text" id="description" name="description" th:field="*{description}"/>
+        </p>
+        <input type="submit"/>
+    </form>
+
+    <a th:href="@{/products/create?categoryId={categoryId}(categoryId=${category.id})}">Create new Product</a>
+
+    <table border="1">
+        <tr>
+            <th>Id</th>
+            <th>Name</th>
+            <th>Description</th>
+            <th>Price</th>
+        </tr>
+
+        <tr th:each="prod : ${category.products}">
+            <td th:text="${prod.id}">1</td>
+            <td><a th:href="@{/products/edit?id={id}(id=${prod.id})}" th:text="${prod.name}"></a></td>
+            <td th:text="${prod.description}">Desc</td>
+            <td th:text="${prod.price}">123.00</td>
+        </tr>
+
+    </table>
+
+</div>
 
 <!-- Optional JavaScript -->
 <!-- jQuery first, then Popper.js, then Bootstrap JS -->

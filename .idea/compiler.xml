@@ -9,8 +9,8 @@
         <module name="spring-mvc-xml" />
         <module name="spring-mvc-thymeleaf" />
         <module name="spring-mvc-jpa" />
-        <module name="spring-mvc-java" />
         <module name="spring-boot-lesson" />
+        <module name="spring-mvc-java" />
       </profile>
     </annotationProcessing>
   </component>

@@ -30,7 +30,7 @@
         <td th:text="${category.id}">1</td>
 
         <td>
-            <a th:href="@{/categories/edit?id={id}(id=${category.id})}" th:text="${category.name}">Product</a>
+            <a th:href="@{/admin/categories/edit?id={id}(id=${category.id})}" th:text="${category.name}">Product</a>
         </td>
 
         <td th:text="${category.description}">Description</td>
